@@ -1,0 +1,13 @@
+{% extends "base_pages/base.html" %}
+{% load static %}
+{% block styles %}
+    
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ login_form }}
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}
