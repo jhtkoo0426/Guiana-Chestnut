@@ -6,8 +6,24 @@ CustomUser = get_user_model()
 
 class AccountsTestClass(TestCase):
     def setUp(self):
-        self.user = CustomUser.objects.create_user(email="user1@gmail.com", username="user1", password="1234")
+        self.user = CustomUser.objects.create_user(
+            email="user1@gmail.com",
+            username="user1",
+            password="1234"
+        )
 
+        self.staff_user = CustomUser.objects.create_staffuser(
+            email="staffuser@gmail.com",
+            username="staffuser",
+            password="1234"
+        )
+
+        self.super_user = CustomUser.objects.create_superuser(
+            email="superuser@gmail.com",
+            username="superuser",
+            password="1234",
+        )
+        
     def test_create_user(self):
         self.assertEqual(self.user.username, "user1")
 
@@ -31,3 +47,9 @@ class AccountsTestClass(TestCase):
     def test_raises_error_if_user_no_password(self):
         with self.assertRaisesMessage(ValueError, "Users must have a password"):
             CustomUser.objects.create_user(email="user1@gmail.com",username="user_no_pwd", password="")
+    
+    def test_staff_user(self):
+        self.assertEqual(self.staff_user.username, "staffuser")
+    
+    def test_staff_user_attributes(self):
+        self.assertTrue(self.staff_user.is_staff)
