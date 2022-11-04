@@ -11,6 +11,7 @@ class SearchTickerMixin:
         return redirect(reverse('search_results', kwargs={'symbol': self.get_ticker(request)}))
     
     def search_ticker(self, symbol):
+        # Integrate finnhub API ffunctionalities here to display features of the required symbol.
         return symbol.upper()
 
 
