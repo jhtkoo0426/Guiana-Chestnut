@@ -1,8 +1,10 @@
 {% extends "base_pages/dashboard_base.html" %}
 {% load static %}
 {% block styles %}
-{% endblock %}
+
+{% endblock styles %}
 
 {% block dashboard-content %}
-    <p>Welcome to the dashboard!</p>
-{% endblock %}
+    Search results:
+    {{ results }}
+{% endblock dashboard-content %}
