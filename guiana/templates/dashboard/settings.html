@@ -1,0 +1,13 @@
+{% extends "base_pages/dashboard_base.html" %}
+{% load static %}
+{% block styles %}
+
+{% endblock styles %}
+
+{% block dashboard-content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ add_api_key_form }}
+        <button type="submit">Update Key</button>
+    </form>
+{% endblock dashboard-content %}

@@ -1,3 +1,4 @@
+from urllib import request
 from django import forms
 from django.contrib.auth import authenticate, get_user_model
 
@@ -111,3 +112,36 @@ class UserRegisterForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class UserAddFinnhubKeyForm(forms.ModelForm):
+    finnhub_api_key = forms.CharField(
+        label='Finnhub API Key',
+        widget=forms.TextInput(attrs={'placeholder': 'Enter API key'})
+    )
+
+    class Meta:
+        model = User
+        fields = ['finnhub_api_key', ]
+    
+    def clean_api_key(self):
+        API_URL = "https://finnhub.io/api/v1/?token="
+        key = self.cleaned_data['finnhub_api_key']
+
+        if key:
+            # Check if the key corresponds to an active subscription
+            url = API_URL + key
+        
+            # Check if exception is raised for any endpoint
+            r = request.get(url)
+            if r.status_code != 401:
+                return key
+        else:
+            raise forms.ValidationError('The API key you entered is invalid.')
+
+    def save(self, commit=True):
+        user = super(UserAddFinnhubKeyForm, self).save(commit=False)
+        user.finnhub_api_key = self.cleaned_data.get('finnhub_api_key')
+        if commit:
+            user.save()
+        return 
