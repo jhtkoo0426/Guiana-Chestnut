@@ -1,13 +1,21 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from accounts.forms import UserAddFinnhubKeyForm
+from finnhub_integration.finnhub_api import FinnhubClient
+from finnhub_integration.models import FinnhubSupportedExchanges, FinnhubSupportedStockSymbols
 
 
-class DashboardView(View):
+class FinnhubMixin:
+    f = FinnhubClient()
+    
+    
+class DashboardView(FinnhubMixin, View):
     template_name = "dashboard/dashboard.html"
 
     def get(self, request):
         context = {}
+        self.f.api_key = self.request.user.finnhub_api_key
+        self.f.initialize_client()
         return render(request, self.template_name, context=context)
     
     def post(self, request):
@@ -15,14 +23,32 @@ class DashboardView(View):
         return render(request, self.template_name, context=context)
 
 
-class SearchResultsView(View):
+class SearchResultsView(FinnhubMixin, View):
     template_name = "dashboard/search_results.html"
 
     def get(self, request):
-        symbol = request.GET.get('search_symbol')
-        context = {
-            "results": symbol
-        }
+        self.f.api_key = self.request.user.finnhub_api_key
+        self.f.initialize_client()
+
+        if self.f.check_account_ready(request):
+            print(request.user.finnhub_api_key)
+            symbol = request.GET.get('search_symbol').upper()
+            
+            context = {
+                "symbol": symbol,
+                "message": "Search successful!"
+            }
+            
+            if FinnhubSupportedStockSymbols.objects.filter(symbol_name=symbol).exists():
+                # Symbol is present in the project database -> perform search on symbol
+                financials = self.f.get_symbol_financials(symbol)
+                candlesticks = self.f.get_symbol_candlesticks(symbol)
+                context['financials'] = financials
+                context['candlesticks'] = candlesticks
+        else:
+            context = {
+                "message": "Your API is invalid. Please update it or register for a new one at finnhub.io."
+            }
         return render(request, self.template_name, context=context)
     
     def post(self, request):

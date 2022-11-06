@@ -2,11 +2,13 @@
 Integrates finnhub.io methods into Guiana for stock symbol data processing, analysing and visualisation.
 """
 
+import datetime
+import time
 import finnhub as fh
 import requests
 import csv
 
-from finnhub_integration.models import FinnhubSupportedExchanges
+from finnhub_integration.models import FinnhubSupportedExchanges, FinnhubSupportedStockSymbols
 
 
 class FinnhubClient:
@@ -78,5 +80,40 @@ class FinnhubClient:
                 )
                 new_exchange.save()
                 print('New exchange data saved to db')
-            
-f = FinnhubClient()
+    
+    def check_account_ready(self, request):
+        if request.user.is_authenticated and self.check_key_valid(request.user.finnhub_api_key):
+            self.initialize_client()
+            return True
+        return False
+    
+    def download_symbols(self):
+        symbols = self.client.stock_symbols('US')
+        symbol_exchange = FinnhubSupportedExchanges.objects.get(exchange_code='US')
+
+        for symbol in symbols:
+            symbol_obj = FinnhubSupportedStockSymbols.objects.create(
+                symbol_exchange_code = symbol_exchange,
+                symbol_currency = symbol['currency'],
+                symbol_description = symbol['description'],
+                symbol_type = symbol['type'],
+                symbol_display_sym = symbol['displaySymbol'],
+                symbol_name = symbol['symbol']
+            )
+            symbol_obj.save()        
+
+    def get_symbol_financials(self, symbol: str):
+        print(self.api_key)
+        return self.client.company_profile2(symbol=symbol)
+
+    def get_symbol_candlesticks(self, symbol: str):
+        RESOLUTION = 'D'
+        start_date = time.mktime(
+            datetime.datetime.strptime('01/01/2010', '%d/%m/%Y').timetuple()  # Timestamp of 1 Jan, 2000.
+        )
+        end_date = time.time()  # Current timestamp.
+        
+        candlesticks = self.client.stock_candles(symbol, RESOLUTION, int(start_date), int(end_date))
+
+        # Process candlesticks for plotting with Apache ECharts
+        return candlesticks
