@@ -31,20 +31,12 @@ class SearchResultsView(FinnhubMixin, View):
         self.f.initialize_client()
 
         if self.f.check_account_ready(request):
-            print(request.user.finnhub_api_key)
             symbol = request.GET.get('search_symbol').upper()
-            
             context = {
                 "symbol": symbol,
                 "message": "Search successful!"
             }
-            
-            if FinnhubSupportedStockSymbols.objects.filter(symbol_name=symbol).exists():
-                # Symbol is present in the project database -> perform search on symbol
-                financials = self.f.get_symbol_financials(symbol)
-                candlesticks = self.f.get_symbol_candlesticks(symbol)
-                context['financials'] = financials
-                context['candlesticks'] = candlesticks
+            context = self.f.search_symbol(symbol, context)
         else:
             context = {
                 "message": "Your API is invalid. Please update it or register for a new one at finnhub.io."

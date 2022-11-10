@@ -87,6 +87,7 @@ class FinnhubClient:
             return True
         return False
     
+    # System function used to scrape data from finnhub
     def download_symbols(self):
         symbols = self.client.stock_symbols('US')
         symbol_exchange = FinnhubSupportedExchanges.objects.get(exchange_code='US')
@@ -100,12 +101,21 @@ class FinnhubClient:
                 symbol_display_sym = symbol['displaySymbol'],
                 symbol_name = symbol['symbol']
             )
-            symbol_obj.save()        
+            symbol_obj.save()
 
+    def search_symbol(self, symbol: str, context: dict):
+        if FinnhubSupportedStockSymbols.objects.filter(symbol_name=symbol).exists():
+            financials = self.get_symbol_financials(symbol)
+            candlesticks = self.get_symbol_candlesticks(symbol)
+            context['financials'] = financials
+            context['candlesticks'] = candlesticks
+        return context
+
+    # Auxiliary function to get a symbol's company's financial background
     def get_symbol_financials(self, symbol: str):
-        print(self.api_key)
         return self.client.company_profile2(symbol=symbol)
 
+    # Auxiliary function to get a symbol's quotes from 2010 onwards
     def get_symbol_candlesticks(self, symbol: str):
         RESOLUTION = 'D'
         start_date = time.mktime(
