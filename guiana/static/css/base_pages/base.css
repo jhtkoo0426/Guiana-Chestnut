@@ -1,0 +1,83 @@
+/* 
+    CSS file for the project base template.
+*/
+
+* {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    scroll-behavior: smooth;
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --white: #fff;
+    --matcha: #0C4B33;
+    --matcha-l: #187F58;
+    --matcha-ll: #d5f8eb;
+}
+
+@font-face {
+    font-family: 'InterReg';
+    src: url("../../fonts/Inter/static/Inter-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'InterBold';
+    src: url("../../fonts/Inter/static/Inter-Bold.ttf");
+}
+
+html, body {
+    height: 100%;
+}
+
+p {
+    font-family: 'InterReg';
+}
+
+button[type=submit], input[type=submit] {
+}
+
+input[type=text] {
+    border:0;
+    box-shadow: inset 0 0 0 1px var(--grey);
+    font-family: 'InterReg';
+    font-size: 0.9rem;
+}
+
+.app {
+    min-height: 100%;
+    display: grid;
+    grid-auto-rows: 100px calc(100% - 200px) 100px;
+}
+
+/* Styling for top navigation bar wrapper. */
+.topnav {
+    grid-row: 1;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    padding: 0 5%;
+    background-color: var(--matcha);
+    color: var(--white);
+}
+
+/* Styling for "main" - main container for webapp content. */
+.main {
+    grid-row: 2;
+    height: auto;
+    padding: 0 5%;
+    background-color: var(--matcha-ll);
+}
+
+/* Styling for bottom navigation bar wrapper. */
+.botnav {
+    grid-row: 3;
+    height: 100px;
+    display: grid;
+    align-items: center;
+    padding: 0 5%;
+    background-color: var(--matcha-l);
+    color: var(--white)
+}

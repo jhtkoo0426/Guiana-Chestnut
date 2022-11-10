@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'dashboard',
-    'finnhub_integration'
+    'finnhub_integration',
+    'django_sass'
 ]
 
 MIDDLEWARE = [
