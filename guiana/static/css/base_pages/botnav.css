@@ -1,0 +1,42 @@
+/* 
+    CSS for project bot navigation bar
+*/
+
+.botnav-nav {
+    height: 160px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5%;
+    /* align-items: center; */
+    padding: 2.5% 5%;
+    background-color: var(--matcha-l);
+}
+
+.botnav-nav-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.botnav-nav-col a {
+    margin: 3px 0;
+    text-decoration: none;
+    font-family: 'InterReg';
+    color: var(--white);
+}
+
+.botnav-cr {
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 5%;
+    background-color: var(--matcha);
+}
+
+.botnav-cr > .botnav-credits {
+    font-size: 0.9rem;
+}
+
+.botnav-cr > .botnav-credits a {
+    color: var(--white);
+}

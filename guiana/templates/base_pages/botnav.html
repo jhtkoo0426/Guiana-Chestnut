@@ -1,11 +1,22 @@
 {% load static %}
 {% block styles %}
+    <link rel="stylesheet" href="{% static 'css/base_pages/botnav.css' %}">
 {% endblock %}
 
 <div class="botnav-content">
-    <p class="botnav-title">Guiana Chestnut</p>
-    <p class="botnav-credits">Created by <a href="https://justinkoo.co.uk" target="_blank">Justin Koo</a></p>
-    <div class="botnav-contacts">
-        <p>jhtkbusiness@gmail.com</p>
+    <div class="botnav-nav">
+        <div class="botnav-nav-col">
+            <a href="">Home</a>
+        </div>
+        <div class="botnav-nav-col">
+            {% if user.is_authenticated %}
+                <a href="">Dashboard</a>
+                <a href="{% url 'settings' %}">Settings</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="botnav-cr">
+        <p class="botnav-title">Guiana Chestnut</p>
+        <p class="botnav-credits">Created by <a href="https://justinkoo.co.uk" target="_blank">Justin Koo</a></p>
     </div>
 </div>
