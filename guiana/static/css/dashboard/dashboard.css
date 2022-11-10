@@ -1,0 +1,61 @@
+/* 
+    CSS for project dashboard page.
+*/
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-column-gap: 5%;
+    padding: 5vh 0 3vh 0;
+}
+
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.dashboard-grid-item > .dgi-title {
+    display: flex;
+    padding-bottom: 10px;
+    font-family: 'InterBold';
+    font-size: 0.9rem;
+    color: var(--black);
+}
+
+.dashboard-grid-item > .dgi-title > .dgi-title-circle {
+    width: 10px;
+    height: 10px;
+    margin-top: 4px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.dgi-title-circle.purple { background-color: var(--matcha); }
+.dgi-title-circle.yellow { background-color: var(--matcha); }
+.dgi-title-circle.green { background-color: var(--matcha); }
+.dgi-title-circle.red { background-color: var(--matcha); }
+
+.dashboard-grid-item > .dgi-title > .dgi-title-text {
+    text-transform: uppercase;
+    color: var(--grey);
+}
+
+.dashboard-grid-item > .dgi-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 7px;
+    padding: 10px;
+    margin: 5px 0;
+    font-family: 'InterReg';
+    font-size: 0.9rem;
+    background-color: var(--white);
+    color: var(--black);
+}
+
+.dashboard-grid-item > .dgi-link > i {
+    margin-right: 10px;
+    color: var(--black);
+}

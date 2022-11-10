@@ -1,0 +1,9 @@
+/* 
+    CSS for base template of dashboard.
+*/
+
+.dashboard-title {
+    margin: 35px 0;
+    font-family: 'InterBold';
+    font-size: 1.1rem;
+}

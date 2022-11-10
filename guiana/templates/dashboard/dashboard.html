@@ -1,8 +1,40 @@
 {% extends "base_pages/dashboard_base.html" %}
 {% load static %}
 {% block styles %}
+<link rel="stylesheet" href="{% static 'css/base_pages/dashboard_base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard/dashboard.css' %}">
 {% endblock %}
 
+{% block dashboard-title %}
+    <p>Welcome, {{ user.username }}!</p>
+{% endblock dashboard-title %}
+
 {% block dashboard-content %}
-    <p>Welcome to the dashboard!</p>
+    <!-- TODO: Show headline news -->
+    <div class="dashboard-grid">
+        <div class="dashboard-grid-item fundamental">
+            <p class="dgi-title">
+                <span class="dgi-title-circle purple"></span>
+                <span class="dgi-title-text">fundamental analysis</span>
+            </p>
+            <a href="" class="dgi-link">
+                <i class="fas fa-analytics"></i>
+                <span>Company Financials</span>
+            </a>
+        </div>
+        <div class="dashboard-grid-item technical">
+            <p class="dgi-title">
+                <span class="dgi-title-circle red"></span>
+                <span class="dgi-title-text">technical analysis</span>
+            </p>
+            <a href="" class="dgi-link">
+                <i class="fas fa-analytics"></i>
+                <span>Price Forecasting</span>
+            </a>
+            <a href="" class="dgi-link">
+                <i class="fas fa-analytics"></i>
+                <span>Recommended Instruments</span>
+            </a>
+        </div>
+    </div>
 {% endblock %}
