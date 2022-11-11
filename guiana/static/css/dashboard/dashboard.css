@@ -24,7 +24,6 @@
 
 
 .latest-news-container > .news-item > .news-headline {
-    margin-top: 10px;
     text-decoration: none;
     font-family: 'InterBold';
     font-size: 0.75rem;
@@ -34,7 +33,8 @@
 }
 
 .latest-news-container > .news-item > .news-headline > .news-image {
-    height: 80px;
+    height: 100px;
+    margin-bottom: 10px;
     border-radius: 4px;
 }
 

@@ -15,7 +15,7 @@
     <div class="latest-news-container">
         {% for news in latest_news %}
             <div class="news-item">
-                <a class="news-headline" href="{{ news|get_item:'url' }}">
+                <a class="news-headline" href="{{ news|get_item:'url' }}" target="_blank">
                     <img class="news-image" src="{{ news|get_item:'image'}}"></img>
                     {{ news|get_item:'headline' }}
                 </a>
