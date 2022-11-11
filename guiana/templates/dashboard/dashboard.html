@@ -1,5 +1,6 @@
 {% extends "base_pages/dashboard_base.html" %}
 {% load static %}
+{% load dashboard_filters %}
 {% block styles %}
     <link rel="stylesheet" href="{% static 'css/base_pages/dashboard_base.css' %}">
     <link rel="stylesheet" href="{% static 'css/dashboard/dashboard.css' %}">
@@ -11,6 +12,16 @@
 
 {% block dashboard-content %}
     <!-- TODO: Show headline news -->
+    <div class="latest-news-container">
+        {% for news in latest_news %}
+            <div class="news-item">
+                <a class="news-headline" href="{{ news|get_item:'url' }}">
+                    <img class="news-image" src="{{ news|get_item:'image'}}"></img>
+                    {{ news|get_item:'headline' }}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
     <div class="dashboard-grid">
         <div class="dashboard-grid-item fundamental">
             <p class="dgi-title">

@@ -2,13 +2,17 @@
     CSS for financial instrument search results
 */
 
-.symbol-price {
-    
+.symbol-details h1 {
+    font-size: 1.35rem;
+}
+
+.symbol-details p {
+    font-size: 0.85rem;
 }
 
 .symbol-price > .last-close {
     font-family: 'InterBold';
-    font-size: 2rem;
+    font-size: 2.2rem;
 }
 
 .symbol-price > .last-close-date {

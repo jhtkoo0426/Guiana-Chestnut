@@ -16,10 +16,15 @@ class DashboardView(FinnhubMixin, View):
         context = {}
         self.f.api_key = self.request.user.finnhub_api_key
         self.f.initialize_client()
+        context = {
+            'latest_news': self.f.get_latest_news()
+        }
         return render(request, self.template_name, context=context)
     
     def post(self, request):
-        context = {}
+        context = {
+            'latest_news': self.f.get_latest_news()
+        }
         return render(request, self.template_name, context=context)
 
 

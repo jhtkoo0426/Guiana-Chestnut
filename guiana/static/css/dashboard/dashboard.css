@@ -2,6 +2,42 @@
     CSS for project dashboard page.
 */
 
+.latest-news-container {
+    width: 90vw;
+    display: flex;
+    white-space: nowrap;
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.latest-news-container > .news-item {
+    width: 24.5%;
+    float: none;
+    height: 90%;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    zoom: 1;
+}
+
+
+.latest-news-container > .news-item > .news-headline {
+    margin-top: 10px;
+    text-decoration: none;
+    font-family: 'InterBold';
+    font-size: 0.75rem;
+    color: var(--black);
+    word-break: normal;
+    white-space: normal;
+}
+
+.latest-news-container > .news-item > .news-headline > .news-image {
+    height: 80px;
+    border-radius: 4px;
+}
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);

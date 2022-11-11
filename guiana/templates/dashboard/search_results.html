@@ -7,9 +7,9 @@
 {% endblock styles %}
 
 {% block dashboard-title %}
-    <div>
+    <div class="symbol-details">
         <h1>{{ sym_name }} ({{ symbol }})</h1>
-        <p>{{ sym_exchange }} ({{ sym_obj.symbol_exchange_code.exchange_code }}) | {{ sym_industry }}</p>
+        <p>{{ sym_exchange }} ({{ sym_obj.symbol_exchange_code.exchange_code }}). Currency in {{ sym_currency }}</p>
     </div>
 {% endblock dashboard-title %}
 
@@ -20,9 +20,9 @@
     </div>
     <div class="symbol-core-data-container">
         <div class="symbol-candlesticks" id="candlesticks-chart" style="width: 100%; height: 500px;"></div>
-        
         <div class="symbol-data">
             <div class="symbol-data-column">
+                <p>Summary</p><br>
                 {% for metric, value in financials.items %}
                     <div class="symbol-data-item">
                         <span>{{ metric }}</span>
@@ -32,7 +32,6 @@
                 {% endfor %}
             </div>
         </div>
-        {{ sym_marketCap }}
     </div>
     
 {% endblock dashboard-content %}

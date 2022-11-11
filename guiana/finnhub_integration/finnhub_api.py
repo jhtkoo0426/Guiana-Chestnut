@@ -103,6 +103,12 @@ class FinnhubClient:
             )
             symbol_obj.save()
 
+    # General functions
+    def get_latest_news(self):
+        # https://finnhub.io/docs/api/market-news
+        return self.client.general_news('general', min_id=0)[:10]
+    
+    # Symbol-specific functions
     def search_symbol(self, symbol: str, context: dict):
         if FinnhubSupportedStockSymbols.objects.filter(symbol_name=symbol).exists():
             found_symbol_obj = FinnhubSupportedStockSymbols.objects.get(symbol_name=symbol)
@@ -156,7 +162,6 @@ class FinnhubClient:
     def get_symbol_financials(self, symbol: str):
         # https://finnhub.io/docs/api/company-basic-financials
         financials = self.client.company_basic_financials(symbol, 'all')['metric']
-        print(financials)
         metrics = {
             "52-week range": str(financials["52WeekLow"]) + " - " + str(financials["52WeekHigh"]),
             "Beta (5Y, monthly)": financials["beta"],

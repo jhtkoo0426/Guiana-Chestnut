@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'accounts',
     'dashboard',
     'finnhub_integration',
-    'django_sass'
 ]
 
 MIDDLEWARE = [
