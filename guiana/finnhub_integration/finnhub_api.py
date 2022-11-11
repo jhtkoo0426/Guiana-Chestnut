@@ -105,9 +105,22 @@ class FinnhubClient:
 
     def search_symbol(self, symbol: str, context: dict):
         if FinnhubSupportedStockSymbols.objects.filter(symbol_name=symbol).exists():
+            found_symbol_obj = FinnhubSupportedStockSymbols.objects.get(symbol_name=symbol)
             financials = self.get_symbol_financials(symbol)
             candlesticks = self.get_symbol_candlesticks(symbol)
-            context['financials'] = financials
+            last_close, last_date = self.get_symbol_last_quote(symbol)
+            
+            context['sym_obj'] = found_symbol_obj
+            context['sym'] = symbol 
+            context['sym_last_close'] = last_close
+            context['sym_last_date'] = last_date
+            context['sym_country'] = financials['country']
+            context['sym_currency'] = financials['currency']
+            context['sym_exchange'] = financials['exchange']
+            context['sym_name'] = financials['name']
+            context['sym_url'] = financials['weburl']
+            context['sym_industry'] = financials['finnhubIndustry']
+            context['sym_marketCap'] = financials['marketCapitalization']
             context['candlesticks'] = candlesticks
         return context
 
@@ -123,7 +136,17 @@ class FinnhubClient:
         )
         end_date = time.time()  # Current timestamp.
         
-        candlesticks = self.client.stock_candles(symbol, RESOLUTION, int(start_date), int(end_date))
-
+        candlesticks_json = self.client.stock_candles(symbol, RESOLUTION, int(start_date), int(end_date))
+        candlesticks_json['t'] = [datetime.datetime.fromtimestamp(x).strftime('%Y-%m-%d') for x in candlesticks_json['t']]
+        
         # Process candlesticks for plotting with Apache ECharts
-        return candlesticks
+        processed = {
+            't': candlesticks_json['t'],
+            'data': [list(i) for i in zip(candlesticks_json['o'], candlesticks_json['c'], candlesticks_json['l'], candlesticks_json['h'])]
+        }
+        return processed
+
+    def get_symbol_last_quote(self, symbol: str):
+        quotes = self.client.quote(symbol)
+        t = datetime.datetime.fromtimestamp(quotes['t']).strftime('%d/%m/%Y')
+        return quotes['c'], t

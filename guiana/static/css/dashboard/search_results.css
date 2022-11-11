@@ -1,0 +1,32 @@
+/* 
+    CSS for financial instrument search results
+*/
+
+.symbol-price {
+    
+}
+
+.symbol-price > .last-close {
+    font-family: 'InterBold';
+    font-size: 2rem;
+}
+
+.symbol-price > .last-close-date {
+    font-family: 'InterReg';
+    font-size: 0.8rem;
+}
+
+.symbol-core-data-container {
+    display: grid;
+    grid-template-columns: 75% 20%;
+    grid-gap: 5%;
+}
+
+.symbol-candlesticks { width: 100% !important;}
+
+@media (max-width: 992px) {
+    .symbol-core-data-container {
+        grid-template-columns: 100%;
+    }
+}
+

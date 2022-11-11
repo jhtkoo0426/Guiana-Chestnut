@@ -1,11 +1,138 @@
 {% extends "base_pages/dashboard_base.html" %}
 {% load static %}
 {% block styles %}
-
+    <link rel="stylesheet" href="{% static 'css/base_pages/dashboard_base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard/search_results.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.6.0/echarts-en.min.js"></script>
 {% endblock styles %}
 
+{% block dashboard-title %}
+    <div>
+        <h1>{{ sym_name }} ({{ symbol }})</h1>
+        <p>{{ sym_exchange }} ({{ sym_obj.symbol_exchange_code.exchange_code }}) | {{ sym_industry }}</p>
+    </div>
+{% endblock dashboard-title %}
+
 {% block dashboard-content %}
-    {{ message }}<br>
-    Search results:
-    {{ symbol }}
+    <div class="symbol-price">
+        <span class="last-close">{{ sym_last_close }}</span>
+        <span class="last-close-date">(Last updated: {{ sym_last_date }})</span>
+    </div>
+    <div class="symbol-core-data-container">
+        <div class="symbol-candlesticks" id="candlesticks-chart" style="width: 100%; height: 500px;"></div>
+        <div class="symbol-data"></div>
+    </div>
+    
 {% endblock dashboard-content %}
+
+{% block javascript %}
+    <script>
+        // Initialize candlesticks chart.
+        var chartDom = document.getElementById('candlesticks-chart');
+        var myChart = echarts.init(chartDom);
+
+        // Add responsiveness to candlesticks chart.
+        window.onresize = function() {
+            myChart.resize();
+        }
+
+        var candlesticks = {{candlesticks|safe}};
+        
+        plotSymbolCandlesticks(candlesticks, JSON.parse(JSON.stringify("{{ sym|safe }}")));
+
+        function plotSymbolCandlesticks(candlesticks, sym) {
+
+            // Colors for candlesticks;
+            const upColor = '#168882';
+            const upBorderColor = '#168882';
+            const downColor = '#FF7075';
+            const downBorderColor = '#FF7075';
+
+            // Options for candlesticks chart;
+            var option = {
+                xAxis: {
+                data: candlesticks['t'],
+                min: 'dataMin',
+                max: 'dataMax',
+                axisLabel: {
+                    color: '#0c4b48',
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#168882',
+                    }
+                }
+                },
+                yAxis: {
+                    scale: true,
+                    axisLabel: {
+                        color: '#0c4b48',
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#168882',
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#168882',
+                        }
+                    }
+                },
+                grid: {
+                    borderColor: '#168882',
+                    left: 30,
+                    top: 30,
+                    right: 0,
+                    bottom: 50
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                    }
+                },
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        start: 99,
+                        end: 100
+                    },
+                    {
+                        show: true,
+                        type: 'slider',
+                        start: 99,
+                        end: 100,
+                        bottom: 0,
+                        borderColor: '#168882',
+                        fillerColor: 'rgba(22, 136, 130, 0.6)',
+                        handleStyle: {
+                            borderColor: '#0c4b48',
+                            color: '#0c4b48'
+                        },
+                        dataBackground: {
+                            areaStyle: {
+                                color: '#0c4b48',
+                            },
+                        },
+                    }
+                ],
+                series: [
+                    {
+                        name: sym,
+                        type: 'candlestick',
+                        data: candlesticks['data'],
+                        itemStyle: {
+                        color: upColor,
+                        color0: downColor,
+                        borderColor: upBorderColor,
+                        borderColor0: downBorderColor
+                        },
+                    }
+                ],
+            };
+
+            myChart.setOption(option);
+        }
+    </script>
+{% endblock %}
