@@ -18,7 +18,7 @@
 
 .symbol-core-data-container {
     display: grid;
-    grid-template-columns: 75% 20%;
+    grid-template-columns: 65% 30%;
     grid-gap: 5%;
 }
 
@@ -26,7 +26,30 @@
 
 @media (max-width: 992px) {
     .symbol-core-data-container {
-        grid-template-columns: 100%;
+        display: block;
     }
 }
 
+.symbol-data {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 5%;
+    margin: 3% 0;
+}
+
+.symbol-data-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.symbol-data-item span {
+    font-family: 'InterReg';
+    font-size: 0.85rem;
+}
+
+.symbol-data-column hr {
+    height: 1px;
+    border: 0;
+    background-color: var(--matcha-ll);
+}

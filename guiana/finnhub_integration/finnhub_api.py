@@ -106,26 +106,28 @@ class FinnhubClient:
     def search_symbol(self, symbol: str, context: dict):
         if FinnhubSupportedStockSymbols.objects.filter(symbol_name=symbol).exists():
             found_symbol_obj = FinnhubSupportedStockSymbols.objects.get(symbol_name=symbol)
+            general_info = self.get_symbol_info(symbol)
             financials = self.get_symbol_financials(symbol)
-            candlesticks = self.get_symbol_candlesticks(symbol)
-            last_close, last_date = self.get_symbol_last_quote(symbol)
+            last_quotes, last_date = self.get_symbol_last_quote(symbol)
             
             context['sym_obj'] = found_symbol_obj
             context['sym'] = symbol 
-            context['sym_last_close'] = last_close
+            context['sym_last_close'] = last_quotes['c']
+            context['sym_last_open'] = last_quotes['o']
             context['sym_last_date'] = last_date
-            context['sym_country'] = financials['country']
-            context['sym_currency'] = financials['currency']
-            context['sym_exchange'] = financials['exchange']
-            context['sym_name'] = financials['name']
-            context['sym_url'] = financials['weburl']
-            context['sym_industry'] = financials['finnhubIndustry']
-            context['sym_marketCap'] = financials['marketCapitalization']
-            context['candlesticks'] = candlesticks
+            context['sym_country'] = general_info['country']
+            context['sym_currency'] = general_info['currency']
+            context['sym_exchange'] = general_info['exchange']
+            context['sym_name'] = general_info['name']
+            context['sym_url'] = general_info['weburl']
+            context['sym_industry'] = general_info['finnhubIndustry']
+            context['sym_marketCap'] = general_info['marketCapitalization']
+            context['candlesticks'] = self.get_symbol_candlesticks(symbol)
+            context['financials'] = financials
         return context
 
-    # Auxiliary function to get a symbol's company's financial background
-    def get_symbol_financials(self, symbol: str):
+    # Auxiliary function to get a symbol's company's general information
+    def get_symbol_info(self, symbol: str):
         return self.client.company_profile2(symbol=symbol)
 
     # Auxiliary function to get a symbol's quotes from 2010 onwards
@@ -149,4 +151,17 @@ class FinnhubClient:
     def get_symbol_last_quote(self, symbol: str):
         quotes = self.client.quote(symbol)
         t = datetime.datetime.fromtimestamp(quotes['t']).strftime('%d/%m/%Y')
-        return quotes['c'], t
+        return quotes, t
+    
+    def get_symbol_financials(self, symbol: str):
+        # https://finnhub.io/docs/api/company-basic-financials
+        financials = self.client.company_basic_financials(symbol, 'all')['metric']
+        print(financials)
+        metrics = {
+            "52-week range": str(financials["52WeekLow"]) + " - " + str(financials["52WeekHigh"]),
+            "Beta (5Y, monthly)": financials["beta"],
+            "EPS (TTM)": financials["epsExclExtraItemsTTM"],
+            "Payout Ratio (Annual)": financials["payoutRatioAnnual"],
+            "Payout Ratio (TTM)": financials["payoutRatioTTM"],
+        }
+        return metrics

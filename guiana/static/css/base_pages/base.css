@@ -15,7 +15,8 @@
     --white: #fff;
     --matcha: #0c4b48;
     --matcha-l: #168882;
-    --matcha-ll: #c7f7f4;
+    --matcha-ll: #60ccc7;
+    --matcha-lll: #daf7f5;
 }
 
 @font-face {
@@ -68,7 +69,7 @@ input[type=text] {
     grid-row: 2;
     height: auto;
     padding: 0 5%;
-    background-color: var(--matcha-ll);
+    background-color: var(--matcha-lll);
 }
 
 /* Styling for bottom navigation bar wrapper. */
