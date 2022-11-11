@@ -57,3 +57,28 @@
     border: 0;
     background-color: var(--matcha-ll);
 }
+
+.symbol-data-column.news > .news-item {
+    display: flex;
+    grid-gap: 10px;
+    zoom: 1;
+}
+
+.symbol-data-column.news > .news-item > div > p {
+    font-size: 0.7rem;
+}
+
+.symbol-data-column.news > .news-item > div > .news-headline {
+    text-decoration: none;
+    font-family: 'InterReg';
+    font-size: 0.85rem;
+    color: var(--black);
+}
+
+.symbol-data-column.news > .news-item > .news-image {
+    width:  150px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}

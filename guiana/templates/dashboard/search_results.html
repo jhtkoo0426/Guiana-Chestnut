@@ -1,5 +1,6 @@
 {% extends "base_pages/dashboard_base.html" %}
 {% load static %}
+{% load dashboard_filters %}
 {% block styles %}
     <link rel="stylesheet" href="{% static 'css/base_pages/dashboard_base.css' %}">
     <link rel="stylesheet" href="{% static 'css/dashboard/search_results.css' %}">
@@ -21,7 +22,7 @@
     <div class="symbol-core-data-container">
         <div class="symbol-candlesticks" id="candlesticks-chart" style="width: 100%; height: 500px;"></div>
         <div class="symbol-data">
-            <div class="symbol-data-column">
+            <div class="symbol-data-column summary">
                 <p>Summary</p><br>
                 {% for metric, value in financials.items %}
                     <div class="symbol-data-item">
@@ -29,6 +30,20 @@
                         <strong><span>{{ value }}</span></strong>
                     </div>
                     <hr>
+                {% endfor %}
+            </div>
+            <div class="symbol-data-column news">
+                <p>Latest News</p><br>
+                {% for news in weekly_news %}
+                    <div class="news-item">
+                        <img class="news-image" src="{{ news|get_item:'image'}}"></img>
+                        <div>
+                            <p>{{ news|get_item:'source' }} | {{ news|get_item:'upload_timedelta'}}</p>
+                            <a class="news-headline" href="{{ news|get_item:'url' }}" target="_blank">
+                                {{ news|get_item:'headline' }}
+                            </a>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
         </div>
