@@ -32,21 +32,21 @@
                     <hr>
                 {% endfor %}
             </div>
-            <div class="symbol-data-column news">
-                <p>Latest News</p><br>
-                {% for news in weekly_news %}
-                    <div class="news-item">
-                        <img class="news-image" src="{{ news|get_item:'image'}}"></img>
-                        <div>
-                            <p>{{ news|get_item:'source' }} | {{ news|get_item:'upload_timedelta'}}</p>
-                            <a class="news-headline" href="{{ news|get_item:'url' }}" target="_blank">
-                                {{ news|get_item:'headline' }}
-                            </a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
         </div>
+    </div>
+    <div class="symbol-news">
+        <p>Latest News</p><br>
+        {% for news in weekly_news %}
+            <div class="news-item">
+                <img class="news-image" src="{{ news|get_item:'image'}}"></img>
+                <div>
+                    <p>{{ news|get_item:'source' }} | {{ news|get_item:'upload_timedelta'}}</p>
+                    <a class="news-headline" href="{{ news|get_item:'url' }}" target="_blank">
+                        {{ news|get_item:'headline' }}
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
     </div>
     
 {% endblock dashboard-content %}
