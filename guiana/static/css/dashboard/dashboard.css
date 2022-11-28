@@ -46,7 +46,7 @@
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-column-gap: 5%;
     padding: 5vh 0 3vh 0;
 }
@@ -71,12 +71,9 @@
     margin-top: 4px;
     border-radius: 50%;
     margin-right: 5px;
+    background-color: var(--blue);
 }
 
-.dgi-title-circle.purple { background-color: var(--matcha); }
-.dgi-title-circle.yellow { background-color: var(--matcha); }
-.dgi-title-circle.green { background-color: var(--matcha); }
-.dgi-title-circle.red { background-color: var(--matcha); }
 
 .dashboard-grid-item > .dgi-title > .dgi-title-text {
     text-transform: uppercase;
@@ -93,11 +90,10 @@
     margin: 5px 0;
     font-family: 'InterReg';
     font-size: 0.9rem;
-    background-color: var(--white);
     color: var(--black);
 }
 
 .dashboard-grid-item > .dgi-link > i {
     margin-right: 10px;
-    color: var(--black);
+    color: var(--blue);
 }

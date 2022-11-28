@@ -50,6 +50,7 @@ coverage html
 ## Todo
 - [ ] Prevent access to login & register page when logged in
 - [ ] Prevent access to login-only pages when not logged in
+- [ ] Refactor search results page into individual sections (overall, news, strategies pages should all be separated)
 
 
 ## Future features

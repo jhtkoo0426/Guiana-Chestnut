@@ -33,7 +33,7 @@
     <div class="symbol-core-data-container">
         <div class="symbol-candlesticks" id="candlesticks-chart" style="width: 100%; height: 500px;"></div>
         <div class="symbol-data">
-            <div class="symbol-data-column summary">
+            <div class="symbol-data-column" id="summary">
                 <p>Summary</p>
                 {% for metric, value in financials.items %}
                     <div class="symbol-data-item">
@@ -44,7 +44,7 @@
                 {% endfor %}
             </div>
             <br>
-            <div class="symbol-data-column news-analysis">
+            <div class="symbol-data-column" id="news-analysis">
                 <p>News Analysis</p>
                 <div class="symbol-data-item">
                     <span>Average Polarity</span>
