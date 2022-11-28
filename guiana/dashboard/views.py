@@ -4,6 +4,8 @@ from accounts.forms import UserAddFinnhubKeyForm
 from finnhub_integration.finnhub_api import FinnhubClient
 from finnhub_integration.models import FinnhubSupportedExchanges, FinnhubSupportedStockSymbols
 
+import requests
+
 
 class FinnhubMixin:
     f = FinnhubClient()
@@ -42,7 +44,8 @@ class SearchResultsView(FinnhubMixin, View):
             symbol = request.GET.get('search_symbol').upper()
             context = {
                 "symbol": symbol,
-                "message": "Search successful!"
+                "message": "Search successful!",
+                "api_key": request.user.finnhub_api_key,
             }
             context = self.f.search_symbol(symbol, context)
         else:

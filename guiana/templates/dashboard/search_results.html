@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{% static 'css/base_pages/dashboard_base.css' %}">
     <link rel="stylesheet" href="{% static 'css/dashboard/search_results.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.6.0/echarts-en.min.js"></script>
+    <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
 {% endblock styles %}
 
 {% block dashboard-title %}
@@ -163,5 +164,37 @@
 
             myChart.setOption(option);
         }
+    </script>
+
+    <script>
+        const api_key = "{{api_key}}";
+        const symbol = "{{symbol}}";
+        const last_price_display = document.querySelector(".last-close");
+        let last_price = null;
+
+        const socket = new WebSocket('wss://ws.finnhub.io?token=' + api_key);
+
+        // Connection opened -> Subscribe
+        socket.addEventListener('open', function (event) {
+            // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'TSLA'}))
+            // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AMD'}))
+            socket.send(JSON.stringify({'type':'subscribe', 'symbol': symbol}))
+        });
+
+        socket.onmessage = (event) => {
+            var socket_data = JSON.parse(event.data);
+            last_price = socket_data['data'][socket_data['data'].length - 1]['p'];
+        }
+
+        
+        // Listen for messages
+        setInterval(() => {
+            last_price_display.innerHTML = last_price;
+        }, 5000)
+
+        // Unsubscribe
+        window.onbeforeunload = function(symbol) {
+            socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
+        } 
     </script>
 {% endblock %}
