@@ -34,7 +34,7 @@
         <div class="symbol-candlesticks" id="candlesticks-chart" style="width: 100%; height: 500px;"></div>
         <div class="symbol-data">
             <div class="symbol-data-column summary">
-                <p>Summary</p><br>
+                <p>Summary</p>
                 {% for metric, value in financials.items %}
                     <div class="symbol-data-item">
                         <span>{{ metric }}</span>
@@ -43,20 +43,35 @@
                     <hr>
                 {% endfor %}
             </div>
+            <br>
+            <div class="symbol-data-column news-analysis">
+                <p>News Analysis</p>
+                <div class="symbol-data-item">
+                    <span>Average Polarity</span>
+                    <strong><span>{{ news_polarity }}</span></strong>
+                </div>
+                <div class="symbol-data-item">
+                    <span>Average Subjectivity</span>
+                    <strong><span>{{ news_subjectivity}}</span></strong>
+                </div>
+            </div>
         </div>
     </div>
     <div class="symbol-news">
         <p>Latest News</p><br>
-        {% for news in weekly_news %}
+        {% for n in news %}
             <div class="news-item">
-                <img class="news-image" src="{{ news|get_item:'image'}}"></img>
+                <img class="news-image" src="{{ n|get_item:'image'}}"></img>
                 <div>
-                    <p>{{ news|get_item:'source' }} | {{ news|get_item:'upload_timedelta'}}</p>
-                    <a class="news-headline" href="{{ news|get_item:'url' }}" target="_blank">
-                        {{ news|get_item:'headline' }}
+                    <p>
+                        {{ n|get_item:'source' }} | 
+                        {{ n|get_item:'upload_timedelta'}} | 
+                        Polarity: {{ n|get_item:'polarity' }} |
+                        Subjectivity: {{ n|get_item:'subjectivity' }}
+                    </p>
+                    <a class="news-headline" href="{{ n|get_item:'url' }}" target="_blank">
+                        {{ n|get_item:'headline' }}
                     </a>
-                    <p>Polarity: {{ news|get_item:'polarity' }}</p>
-                    <p>Subjectivity: {{ news|get_item:'subjectivity' }}</p>
                 </div>
             </div>
         {% endfor %}

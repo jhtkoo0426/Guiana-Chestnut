@@ -170,6 +170,7 @@ class FinnhubClient:
             found_symbol_obj = FinnhubSupportedStockSymbols.objects.get(symbol_name=symbol)
             general_info = self.get_symbol_info(symbol)
             last_quote = self.get_symbol_last_quote(symbol)
+            all_news, polarity_av, subjectivity_av = self.get_symbol_news(symbol)
 
             context['sym_obj'] = found_symbol_obj
             context['sym'] = symbol
@@ -185,7 +186,9 @@ class FinnhubClient:
             context['sym_ytd_close'] = self.get_ytd_close(symbol)
             context['candlesticks'] = self.get_symbol_candlesticks(symbol)
             context['financials'] = self.get_symbol_financials(symbol)
-            context['weekly_news'] = self.get_symbol_news(symbol)
+            context['news'] = all_news
+            context['news_polarity'] = polarity_av
+            context['news_subjectivity'] = subjectivity_av
         return context
 
     
@@ -255,15 +258,20 @@ class FinnhubClient:
 
         now = self.calc_now_timestamp()
         now_date = self.calc_date_from_timestamp(now, "%Y-%m-%d")
-        week_ago = self.calc_date_delta_from_timestamp(now, 3, "%Y-%m-%d")
-        news = self.client.company_news(symbol, _from=week_ago, to=now_date)
+        week_ago = self.calc_date_delta_from_timestamp(now, 7, "%Y-%m-%d")
+        all_news = self.client.company_news(symbol, _from=week_ago, to=now_date)
+        polarities, subjectivities = 0, 0
         
-        for item in news:
-            item['upload_timedelta'] = self.calc_time_delta_from_now(item['datetime'])
-            news_polarity, news_subjectivity = self.news_sentiment_analysis(item['summary'])
-            item['polarity'] = news_polarity
-            item['subjectivity'] = news_subjectivity
-        return news
+        for news in all_news:
+            news['upload_timedelta'] = self.calc_time_delta_from_now(news['datetime'])
+            news_polarity, news_subjectivity = self.news_sentiment_analysis(news['summary'])
+            news['polarity'] = round(news_polarity, 2)
+            news['subjectivity'] = round(news_subjectivity, 2)
+            polarities += news_polarity
+            subjectivities += news_subjectivity
+        polarities_avg = round(polarities / len(all_news), 4)
+        subjectivities_avg = round(subjectivities / len(all_news), 4)
+        return all_news, polarities_avg, subjectivities_avg
     
     def news_sentiment_analysis(self, summary: str):
         analysis = self.nlp(summary)

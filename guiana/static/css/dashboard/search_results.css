@@ -78,7 +78,8 @@
 }
 
 .symbol-news > .news-item {
-    display: flex;
+    display: grid;
+    grid-template-columns: 150px calc(100% - 150px);
     grid-gap: 10px;
     zoom: 1;
 }
@@ -88,10 +89,9 @@
 }
 
 .symbol-news > .news-item > div > .news-headline {
-    text-decoration: none;
     font-family: 'InterReg';
     font-size: 0.85rem;
-    color: var(--black);
+    color: var(--blue);
 }
 
 .symbol-news > .news-item > .news-image {
