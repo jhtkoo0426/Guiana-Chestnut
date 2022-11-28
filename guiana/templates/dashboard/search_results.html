@@ -55,6 +55,8 @@
                     <a class="news-headline" href="{{ news|get_item:'url' }}" target="_blank">
                         {{ news|get_item:'headline' }}
                     </a>
+                    <p>Polarity: {{ news|get_item:'polarity' }}</p>
+                    <p>Subjectivity: {{ news|get_item:'subjectivity' }}</p>
                 </div>
             </div>
         {% endfor %}

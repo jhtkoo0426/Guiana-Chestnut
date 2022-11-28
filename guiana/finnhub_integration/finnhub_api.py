@@ -8,6 +8,8 @@ import time
 import finnhub as fh
 import requests
 import csv
+import spacy
+from spacytextblob.spacytextblob import SpacyTextBlob
 
 from finnhub_integration.models import FinnhubSupportedExchanges, FinnhubSupportedStockSymbols
 
@@ -23,6 +25,9 @@ class FinnhubClient:
         self.api_key = None
         self.client = None
         self.API_URL = "https://finnhub.io/api/v1/?token="
+
+        self.nlp = spacy.load('en_core_web_lg')
+        self.nlp.add_pipe('spacytextblob')
     
         
     def update_key(self, key: str):
@@ -252,7 +257,16 @@ class FinnhubClient:
         now_date = self.calc_date_from_timestamp(now, "%Y-%m-%d")
         week_ago = self.calc_date_delta_from_timestamp(now, 3, "%Y-%m-%d")
         news = self.client.company_news(symbol, _from=week_ago, to=now_date)
-
+        
         for item in news:
             item['upload_timedelta'] = self.calc_time_delta_from_now(item['datetime'])
+            news_polarity, news_subjectivity = self.news_sentiment_analysis(item['summary'])
+            item['polarity'] = news_polarity
+            item['subjectivity'] = news_subjectivity
         return news
+    
+    def news_sentiment_analysis(self, summary: str):
+        analysis = self.nlp(summary)
+        news_sentiment = analysis._.blob.sentiment
+        polarity, subjectivity = news_sentiment.polarity, news_sentiment.subjectivity
+        return polarity, subjectivity

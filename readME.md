@@ -9,7 +9,8 @@
 - [ ] Simple time series forecasting for stock trends (overall trend only)
 - [ ] Recommendation system for good financial instruments
 - [ ] Extend platform to other financial instruments (crypto, etc.)
-- [ ] Major news (based on NLP)
+- [x] News sentiment analysis (based on NLP)
+- [ ] Volume spread analysis
   
 ### Debugging
 Sync database after making migrations:
