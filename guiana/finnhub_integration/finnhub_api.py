@@ -171,7 +171,6 @@ class FinnhubClient:
             context['sym'] = symbol 
             context['sym_last_close'] = last_quotes['c']
             context['sym_last_open'] = last_quotes['o']
-            context['sym_last_date'] = last_date
             context['sym_country'] = general_info['country']
             context['sym_currency'] = general_info['currency']
             context['sym_exchange'] = general_info['exchange']

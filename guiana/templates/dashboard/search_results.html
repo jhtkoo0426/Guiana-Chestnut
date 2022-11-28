@@ -21,7 +21,7 @@
 {% block dashboard-content %}
     <div class="symbol-price">
         <span class="last-close">{{ sym_last_close }}</span>
-        <span class="last-close-date">(Last updated: {{ sym_last_date }})</span>
+        <span class="last-close-date"></span>
     </div>
     <div class="symbol-core-data-container">
         <div class="symbol-candlesticks" id="candlesticks-chart" style="width: 100%; height: 500px;"></div>
@@ -166,18 +166,29 @@
         }
     </script>
 
-    <script>
+    <script>        
         const api_key = "{{api_key}}";
         const symbol = "{{symbol}}";
         const last_price_display = document.querySelector(".last-close");
+        const current_time_display = document.querySelector(".last-close-date");
         let last_price = null;
 
+        function set_last_updated_date() {
+            const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            var date = new Date();
+            var current_day = months[date.getMonth()] + "-" + date.getDate();
+            var current_time = date.getHours() + ":" + date.getMinutes();
+            current_time_display.innerHTML = "(Last Updated: " + current_day + " " + current_time + ")";
+        }
+
+        // Update time on load
+        set_last_updated_date();
+
+        // Subscribe to finnhub websocket to listen for price data of queried stock symbol
         const socket = new WebSocket('wss://ws.finnhub.io?token=' + api_key);
 
         // Connection opened -> Subscribe
         socket.addEventListener('open', function (event) {
-            // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'TSLA'}))
-            // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AMD'}))
             socket.send(JSON.stringify({'type':'subscribe', 'symbol': symbol}))
         });
 
@@ -185,11 +196,11 @@
             var socket_data = JSON.parse(event.data);
             last_price = socket_data['data'][socket_data['data'].length - 1]['p'];
         }
-
         
-        // Listen for messages
+        // Listen for messages at intervals
         setInterval(() => {
             last_price_display.innerHTML = last_price;
+            set_last_updated_date();
         }, 5000)
 
         // Unsubscribe
