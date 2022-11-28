@@ -10,7 +10,7 @@
             <form method="get" action="{% url 'search_results' %}" class="search-form">
                 <!-- Important field to POST the user input symbol for searching. Used in dashboard/views.py. -->
                 <label for="search_symbol"><i class="fal fa-search"></i></label>
-                <input type="text" name="search_symbol" id="" placeholder="Symbol, eg. AAPL"></input>
+                <input type="text" name="search_symbol" id="" placeholder="Symbol, eg. AAPL" spellcheck="false"></input>
             </form>
             <a href="{% url 'dashboard' %}" class="tc-links">Dashboard</a>
         </div>

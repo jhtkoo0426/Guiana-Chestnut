@@ -15,10 +15,11 @@
     --white: #fff;
     --black: #000;
     --dark-grey: #0B131D;
-    --mid-grey: #6A6D78;
+    --mid-grey: #6a6d78;
     --light-grey: #e0e0e0;
     --blue: #420FE7;
     --blue-pale: #E8F0FE;
+    --border-color: #E0E3EB;
 
     --p-small-no-r: 16px;
 }
@@ -33,20 +34,12 @@
     src: url("../../fonts/Inter/static/Inter-Bold.ttf");
 }
 
-html, body {
-    height: 100%;
-}
+html, body { height: 100%; }
 
-p {
-    font-family: 'InterReg';
-}
-
-button[type=submit], input[type=submit] {
-}
+p { font-family: 'InterReg'; }
 
 input[type=text] {
     border:0;
-    box-shadow: inset 0 0 0 1px var(--grey);
     font-family: 'InterReg';
     font-size: 0.9rem;
 }
@@ -64,7 +57,7 @@ input[type=text] {
     display: flex;
     align-items: center;
     padding: 0 15%;
-    border-bottom: 1px solid var(--light-grey);
+    border-bottom: 1px solid var(--border-color);
     color: var(--black);
 }
 
@@ -81,6 +74,6 @@ input[type=text] {
     height: 100px;
     display: grid;
     align-items: center;
-    border-top: 1px solid var(--light-grey);
+    border-top: 1px solid var(--border-color);
     color: var(--black);
 }
