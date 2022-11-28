@@ -9,7 +9,9 @@
 ![Alt](guiana/static/media/guiana_sample.png)
 
 ## Introduction
-Guiana Chestnut (Money Tree) is my most ambitious project so far that combines multiple technologies that I have acquired so far, from full-stack web development to stock analysis. I hope that this project can demonstrate my skills in specific areas such as using APIs, data collection & analysis, unit testing & refactoring, and much more.
+Guiana Chestnut (Money Tree) is my most ambitious project so far that combines multiple technologies that I have acquired so far, from full-stack web development to stock analysis. 
+
+**Why re-invent the wheel when so many screening services are available?** The main is I hope that this project can demonstrate my skillset through developing an end-to-end system, built using highly-transferrable skills such as using APIs, data collection & analysis, unit testing & refactoring, and much more.
 
 The commit history to Guiana should be relatively new. This is because Guiana is built based on several other smaller projects that I've done, including:
 - <a href="https://github.com/jhtkoo0426/Okane">Okane</a> that focuses solely on interacting with an online stock broker
