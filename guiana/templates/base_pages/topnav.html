@@ -5,22 +5,21 @@
 
 <div class="topnav-content">
     {% if user.is_authenticated %}
-        <a href="{% url 'dashboard' %}" class="topnav-title">Guiana 🌰</a>
-        <div class="topnav-links">
-            <form method="get" action="{% url 'search_results' %}">
+        <div class="topnav-core">
+            <a href="{% url 'dashboard' %}" class="topnav-title">Guiana</a>
+            <form method="get" action="{% url 'search_results' %}" class="search-form">
                 <!-- Important field to POST the user input symbol for searching. Used in dashboard/views.py. -->
-                <input type="text" name="search_symbol" id="" placeholder="Search for ticker">
-                <button type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
+                <label for="search_symbol"><i class="fal fa-search"></i></label>
+                <input type="text" name="search_symbol" id="" placeholder="Symbol, eg. AAPL"></input>
             </form>
+            <a href="{% url 'dashboard' %}" class="tc-links">Dashboard</a>
         </div>
         <div class="topnav-auth-links">
             <a href="{% url 'settings' %}">Settings</a>
             <a href="{% url 'logout' %}">Logout</a>
         </div>
     {% else %}
-        <a href="" class="topnav-title">Guiana 🌰</a>
+        <a href="" class="topnav-title">Guiana</a>
         <div class="topnav-auth-links">
             <a href="{% url 'register' %}">Register</a>
             <a href="{% url 'login' %}">Login</a>

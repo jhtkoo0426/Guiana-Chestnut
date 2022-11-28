@@ -12,12 +12,15 @@
 }
 
 :root {
-    --black: #000;
     --white: #fff;
-    --matcha: #0c4b48;
-    --matcha-l: #168882;
-    --matcha-ll: #60ccc7;
-    --matcha-lll: #daf7f5;
+    --black: #000;
+    --dark-grey: #0B131D;
+    --mid-grey: #6A6D78;
+    --light-grey: #e0e0e0;
+    --blue: #420FE7;
+    --blue-pale: #E8F0FE;
+
+    --p-small-no-r: 16px;
 }
 
 @font-face {
@@ -48,46 +51,21 @@ input[type=text] {
     font-size: 0.9rem;
 }
 
-/* custom scrollbar CSS */
-::-webkit-scrollbar {
-    width: 20px;
-    height: 22px;
-    background-color: transparent;
-}
-  
-::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-  
-::-webkit-scrollbar-thumb {
-    background-color: var(--matcha-l) !important;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    background-clip: content-box;
-}
-::-webkit-scrollbar-track-piece
-{
-   display:none;
-}
-::-webkit-scrollbar-thumb:hover {
-    background-color: var(--matcha-ll);
-}
-
 .app {
     min-height: 100%;
     display: grid;
-    grid-auto-rows: 100px calc(100% - 350px) 250px;
+    grid-auto-rows: 80px calc(100% - 180px) 100px;
 }
 
 /* Styling for top navigation bar wrapper. */
 .topnav {
     grid-row: 1;
-    height: 100px;
+    height: 80px;
     display: flex;
     align-items: center;
     padding: 0 15%;
-    background-color: var(--matcha);
-    color: var(--white);
+    border-bottom: 1px solid var(--light-grey);
+    color: var(--black);
 }
 
 /* Styling for "main" - main container for webapp content. */
@@ -95,15 +73,14 @@ input[type=text] {
     grid-row: 2;
     height: auto;
     padding: 0 15%;
-    background-color: var(--matcha-lll);
 }
 
 /* Styling for bottom navigation bar wrapper. */
 .botnav {
     grid-row: 3;
-    height: 250px;
+    height: 100px;
     display: grid;
     align-items: center;
-    background-color: var(--matcha-l);
-    color: var(--white)
+    border-top: 1px solid var(--light-grey);
+    color: var(--black);
 }

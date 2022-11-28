@@ -11,37 +11,55 @@
 
 .topnav-title {
     text-decoration: none;
-    font-family: 'InterReg';
-    font-size: 1.1rem;
-    color: var(--white);
+    font-family: 'InterBold' !important;
+    font-size: 1.3rem;
+    color: var(--black);
 }
 
-.topnav-links input[type=text] {
-    height: 30px;
-    padding: 6px 12px;
-    border: 0;
-    border-radius: 6px;
-    font-family: 'InterReg';
+.topnav-core {
+    display: flex;
+    align-items: center;
 }
 
-.topnav-links input[type=text]:focus {
+.topnav-core > .tc-links {
+    margin-left: 20px;
+    text-decoration: none;
+    font-family: 'InterReg';
+    color: var(--black);
+}
+
+.topnav-core > .search-form {
+    display: flex;
+    align-items: center;
+    margin-left: 5vw;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'InterReg';
+    background-color: var(--blue-pale) !important;
+    color: var(--black);
+}
+
+.topnav-core input[type=text] {
+    margin-left: 15px;
+    background-color: var(--blue-pale) !important;
+}
+
+.topnav-core input[type=text]::placeholder {
+    color: var(--mid-grey);
+}
+
+.topnav-core input[type=text]:focus {
     outline:  none;
 }
 
-.topnav-links > form > button[type=submit] {
-    height: 30px;
-    padding: 7px 11px;
-    margin-left: 5px;
-    border: 0;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: 'InterReg';
-    color: var(--matcha);
+.topnav-core input[type=text] > label {
+    color: var(--mid-grey);
 }
 
 .topnav-auth-links a {
     margin-left: 15px;
     text-decoration: none;
     font-family: 'InterReg';
-    color: var(--white);
+    font-size: var(--p-small-no-r);
+    color: var(--black);
 }
