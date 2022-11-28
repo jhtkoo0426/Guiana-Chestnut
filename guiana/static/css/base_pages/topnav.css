@@ -11,7 +11,7 @@
 
 .topnav-title {
     text-decoration: none;
-    font-family: 'InterBold' !important;
+    font-family: 'NoahBold' !important;
     font-size: 1.3rem;
     color: var(--black);
 }
@@ -24,7 +24,7 @@
 .topnav-core > .tc-links {
     margin-left: 20px;
     text-decoration: none;
-    font-family: 'InterReg';
+    font-family: 'NoahReg';
     color: var(--black);
 }
 
@@ -34,7 +34,7 @@
     margin-left: 5vw;
     padding: 10px 20px;
     border-radius: 10px;
-    font-family: 'InterReg';
+    font-family: 'NoahReg';
     background-color: var(--blue-pale) !important;
     color: var(--black);
 }
@@ -59,7 +59,7 @@
 .topnav-auth-links a {
     margin-left: 15px;
     text-decoration: none;
-    font-family: 'InterReg';
+    font-family: 'NoahReg';
     font-size: var(--p-small-no-r);
     color: var(--black);
 }

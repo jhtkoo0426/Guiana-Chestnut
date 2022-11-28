@@ -34,6 +34,26 @@
     src: url("../../fonts/Inter/static/Inter-Bold.ttf");
 }
 
+@font-face {
+    font-family: 'NoahReg';
+    src: url("../../fonts/Noah/TTF/Noah\ Head\ Regular.otf");
+}
+
+@font-face {
+    font-family: 'NoahBold';
+    src: url("../../fonts/Noah/TTF/Noah\ Head\ Bold.otf");
+}
+
+@font-face {
+    font-family: 'SSProReg';
+    src: url("../../fonts/SourceSansPro/SourceSansPro-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'SSProBold';
+    src: url("../../fonts/SourceSansPro/SourceSansPro-Bold.ttf");
+}
+
 html, body { height: 100%; }
 
 p { font-family: 'InterReg'; }

@@ -9,8 +9,11 @@
 
 {% block dashboard-title %}
     <div class="symbol-details">
-        <h1>{{ sym_name }} ({{ symbol }})</h1>
-        <p>{{ sym_exchange }} ({{ sym_obj.symbol_exchange_code.exchange_code }}). Currency in {{ sym_currency }}</p>
+        <img src="{{ sym_logo }}" alt="" class="symbol-logo">
+        <div class="symbol-title">
+            <h1>{{ sym_name }} ({{ symbol }})</h1>
+            <p>{{ sym_exchange }} ({{ sym_obj.symbol_exchange_code.exchange_code }}). Currency in {{ sym_currency }}</p>
+        </div>
     </div>
 {% endblock dashboard-title %}
 

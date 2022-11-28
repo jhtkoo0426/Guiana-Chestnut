@@ -179,6 +179,7 @@ class FinnhubClient:
             context['sym_url'] = general_info['weburl']
             context['sym_industry'] = general_info['finnhubIndustry']
             context['sym_marketCap'] = general_info['marketCapitalization']
+            context['sym_logo'] = general_info['logo']
             context['candlesticks'] = self.get_symbol_candlesticks(symbol)
             context['financials'] = financials
             context['weekly_news'] = weekly_news
