@@ -3,6 +3,7 @@ Integrates finnhub.io methods into Guiana for stock symbol data processing, anal
 """
 
 import datetime
+import pytz
 import time
 import finnhub as fh
 import requests
@@ -163,14 +164,10 @@ class FinnhubClient:
         if FinnhubSupportedStockSymbols.objects.filter(symbol_name=symbol).exists():
             found_symbol_obj = FinnhubSupportedStockSymbols.objects.get(symbol_name=symbol)
             general_info = self.get_symbol_info(symbol)
-            financials = self.get_symbol_financials(symbol)
-            last_quotes, last_date = self.get_symbol_last_quote(symbol)
-            weekly_news = self.get_symbol_news(symbol)
+            last_quote = self.get_symbol_last_quote(symbol)
 
             context['sym_obj'] = found_symbol_obj
-            context['sym'] = symbol 
-            context['sym_last_close'] = last_quotes['c']
-            context['sym_last_open'] = last_quotes['o']
+            context['sym'] = symbol
             context['sym_country'] = general_info['country']
             context['sym_currency'] = general_info['currency']
             context['sym_exchange'] = general_info['exchange']
@@ -179,9 +176,11 @@ class FinnhubClient:
             context['sym_industry'] = general_info['finnhubIndustry']
             context['sym_marketCap'] = general_info['marketCapitalization']
             context['sym_logo'] = general_info['logo']
+            context['sym_last_close'] = last_quote['c']
+            context['sym_ytd_close'] = self.get_ytd_close(symbol)
             context['candlesticks'] = self.get_symbol_candlesticks(symbol)
-            context['financials'] = financials
-            context['weekly_news'] = weekly_news
+            context['financials'] = self.get_symbol_financials(symbol)
+            context['weekly_news'] = self.get_symbol_news(symbol)
         return context
 
     
@@ -210,9 +209,22 @@ class FinnhubClient:
 
     
     def get_symbol_last_quote(self, symbol: str):
-        quotes = self.client.quote(symbol)
-        t = datetime.datetime.fromtimestamp(quotes['t']).strftime('%d/%m/%Y')
-        return quotes, t
+        return self.client.quote(symbol)
+
+        
+    def get_ytd_close(self, symbol: str):
+        weekday_int = datetime.datetime.today().weekday()
+        today = int(datetime.datetime.now(pytz.timezone('US/Central')).timestamp())
+
+        # Check if today is Monday (weekday=0) or Sunday (weekday=6)
+        if weekday_int == 6:
+            yesterday = today - 2 * 24 * 60 * 60
+        elif weekday_int == 0:
+            yesterday = today - 3 * 24 * 60 * 60
+        else:
+            yesterday = today - 24 * 60 * 60
+        ytd_quote = self.client.stock_candles(symbol=symbol, resolution='D', _from=yesterday, to=today)
+        return ytd_quote['c'][0]
     
 
     def get_symbol_financials(self, symbol: str):

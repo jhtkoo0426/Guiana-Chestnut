@@ -16,12 +16,24 @@
     font-size: 0.85rem;
 }
 
-.symbol-price > .last-close {
+.symbol-price { display: flex; flex-direction: column;}
+
+.symbol-price > .last-price-wrapper {
     font-family: 'NoahBold';
     font-size: 2.2rem;
 }
 
-.symbol-price > .last-close-date {
+.symbol-price > .last-price-wrapper > .symbol-currency {
+    font-family: 'InterReg';
+    font-size: 0.8rem;
+}
+
+.symbol-price > .last-price-wrapper > .symbol-pd, .symbol-pdp {
+    font-family: 'InterReg';
+    font-size: 1rem;
+}
+
+.symbol-price > .last-date {
     font-family: 'InterReg';
     font-size: 0.8rem;
 }
