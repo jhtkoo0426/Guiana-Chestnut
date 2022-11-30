@@ -37,6 +37,8 @@
     <div class="symbol-analysis-nav">
         <button class="symbol-nav-btn active" id="symbol-candlesticks" onclick="toggle_class(this.id)">Overview</button>
         <button class="symbol-nav-btn" id="symbol-news" onclick="toggle_class(this.id)">News</button>
+        <button class="symbol-nav-btn" id="symbol-finance" onclick="toggle_class(this.id)">Finance</button>
+        <button class="symbol-nav-btn" id="symbol-deep-analytics" onclick="toggle_class(this.id)">Analytics</button>
     </div>
 
     <!-- Symbol candlesticks -->
@@ -88,7 +90,13 @@
             </div>
         {% endfor %}
     </div>
-    
+
+    <!-- Symbol finance -->
+    <div class="symbol-finance symbol-analytics"></div>
+
+    <!-- Symbol analytics -->
+    <div class="symbol-deep-analytics symbol-analytics"></div>
+
 {% endblock dashboard-content %}
 
 {% block javascript %}
@@ -265,7 +273,10 @@
 
         socket.onmessage = (event) => {
             var socket_data = JSON.parse(event.data);
-            last_price = socket_data['data'][socket_data['data'].length - 1]['p'];
+            if (socket_data != null) {
+                // Get the most recent price within the socket timeframe
+                last_price = socket_data['data'][socket_data['data'].length - 1]['p'];
+            }
         }
         
         // Listen for messages at intervals
@@ -281,14 +292,14 @@
     </script>
 
     <script>
+        // JavaScript to change active symbol section (between overview,
+        // news sections, etc.)
         var symbol_nav_buttons = document.querySelectorAll(".symbol-nav-btn");
         var symbol_data_sections = document.querySelectorAll(".symbol-analytics");
 
         function toggle_class(clicked_id) {
-            console.log(clicked_id);
 
             for (let i = 0; i < symbol_data_sections.length; i++) {
-                console.log(symbol_data_sections[i].classList[0], clicked_id);
                 if (symbol_data_sections[i].classList[0] == clicked_id) {
                     symbol_data_sections[i].classList.add("show");
                     symbol_nav_buttons[i].classList.add("active");
