@@ -2,81 +2,104 @@
     CSS for financial instrument search results
 */
 
-.symbol-details {
+/* Symbol name, exchange, exchange code section */
+.symbol-name {
     display: flex;
     grid-column-gap: 20px;
 }
 
-.symbol-details > .symbol-title h1 {
+.symbol-name > .symbol-title h1 {
     font-family: 'NoahBold';
     font-size: 1.75rem;
 }
 
-.symbol-details > .symbol-title  p {
+.symbol-name > .symbol-title  p {
     font-size: 0.85rem;
 }
 
-.symbol-price { display: flex; flex-direction: column;}
+/* Symbol price overview (current price, last updated) */
+.symbol-price-section { display: flex; flex-direction: column;}
 
-.symbol-price > .last-price-wrapper {
+.symbol-price-section > .last-price-wrapper {
     font-family: 'NoahBold';
     font-size: 2.2rem;
 }
 
-.symbol-price > .last-price-wrapper > .symbol-currency {
+.symbol-price-section > .last-price-wrapper > .symbol-currency {
     font-family: 'InterReg';
     font-size: 0.8rem;
 }
 
-.symbol-price > .last-price-wrapper > .symbol-pd, .symbol-pdp {
+.symbol-price-section > .last-price-wrapper > .symbol-pd, .symbol-pdp {
     font-family: 'InterReg';
     font-size: 1rem;
 }
 
-.symbol-price > .last-date {
+.symbol-price-section > .last-date {
     font-family: 'InterReg';
     font-size: 0.8rem;
 }
 
-.symbol-core-data-container {
-    display: grid;
+.symbol-analytics:not(.show) { display: none !important; }
+.symbol-analytics.show {display: block;}
+
+/* Symbol analysis sections navigation */
+.symbol-analysis-nav {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+}
+
+.symbol-analysis-nav > .symbol-nav-btn {
+    width: 100px;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: 'SSProReg';
+    font-size: 18px;
+    background-color: var(--white);
+    border-bottom: 2px solid var(--light-grey);
+}
+
+.symbol-analysis-nav > .symbol-nav-btn.active {
+    border-bottom: 2px solid var(--blue);
+    color: var(--blue);
+}
+
+/* Symbol candlesticks section */
+.symbol-candlesticks {
+    display: grid !important;
     grid-template-columns: 65% 30%;
     grid-gap: 5%;
 }
 
-.symbol-candlesticks { width: 100% !important;}
+.candlesticks-canvas { width: 100% !important;}
 
 @media (max-width: 992px) {
-    .symbol-core-data-container {
-        display: block;
-    }
-
-    .symbol-data {
+    .analytics-grid {
         margin: 20px 0;
     }
 }
 
-.symbol-data-item {
+.analytics-grid-item {
     display: flex;
     justify-content: space-between;
     margin: 10px 0;
 }
 
-.symbol-data-item span {
+.analytics-grid-item span {
     font-family: 'InterReg';
     font-size: 0.85rem;
 }
 
-.symbol-data-column hr {
+.analytics-grid-column hr {
     height: 1px;
     border: 0;
     background-color: var(--matcha-ll);
 }
 
-.symbol-news {
-    margin: 20px 0;
-}
-
+/* Symbol news section */
+.symbol-news { margin: 20px 0; }
 .symbol-news > .news-item {
     display: grid;
     grid-template-columns: 150px calc(100% - 150px);
@@ -84,9 +107,7 @@
     zoom: 1;
 }
 
-.symbol-news > .news-item > div > p {
-    font-size: 0.7rem;
-}
+.symbol-news > .news-item > div > p { font-size: 0.7rem; }
 
 .symbol-news > .news-item > div > .news-headline {
     font-family: 'InterReg';

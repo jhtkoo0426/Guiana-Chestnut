@@ -9,7 +9,8 @@
 {% endblock styles %}
 
 {% block dashboard-title %}
-    <div class="symbol-details">
+    <!-- Symbol name, exchange, exchange code section -->
+    <div class="symbol-name">
         <img src="{{ sym_logo }}" alt="" class="symbol-logo">
         <div class="symbol-title">
             <h1>{{ sym_name }} ({{ symbol }})</h1>
@@ -19,7 +20,8 @@
 {% endblock dashboard-title %}
 
 {% block dashboard-content %}
-    <div class="symbol-price">
+    <!-- Symbol price overview (current price, last updated) -->
+    <div class="symbol-price-section">
         <span class="last-price-wrapper">
             <span class="last-price">{{ sym_last_close }}</span>
             <span class="symbol-currency">{{ sym_currency }}</span>
@@ -30,34 +32,44 @@
         </span>
         <span class="last-date"></span>
     </div>
-    <div class="symbol-core-data-container">
-        <div class="symbol-candlesticks" id="candlesticks-chart" style="width: 100%; height: 500px;"></div>
-        <div class="symbol-data">
-            <div class="symbol-data-column" id="summary">
+
+    <!-- Symbol analysis sections navigation -->
+    <div class="symbol-analysis-nav">
+        <button class="symbol-nav-btn active" id="symbol-candlesticks" onclick="toggle_class(this.id)">Overview</button>
+        <button class="symbol-nav-btn" id="symbol-news" onclick="toggle_class(this.id)">News</button>
+    </div>
+
+    <!-- Symbol candlesticks -->
+    <div class="symbol-candlesticks symbol-analytics show">
+        <div class="candlesticks-canvas" id="candlesticks-chart" style="width: 100%; height: 500px;"></div>
+        <div class="analytics-grid">
+            <div class="analytics-grid-column" id="summary">
                 <p>Summary</p>
                 {% for metric, value in financials.items %}
-                    <div class="symbol-data-item">
+                    <div class="analytics-grid-item">
                         <span>{{ metric }}</span>
                         <strong><span>{{ value }}</span></strong>
                     </div>
                     <hr>
                 {% endfor %}
             </div>
-            <br>
-            <div class="symbol-data-column" id="news-analysis">
-                <p>News Analysis</p>
-                <div class="symbol-data-item">
-                    <span>Average Polarity</span>
-                    <strong><span>{{ news_polarity }}</span></strong>
-                </div>
-                <div class="symbol-data-item">
-                    <span>Average Subjectivity</span>
-                    <strong><span>{{ news_subjectivity}}</span></strong>
-                </div>
-            </div>
         </div>
     </div>
-    <div class="symbol-news">
+
+    <!-- Symbol news -->
+    <div class="symbol-news symbol-analytics">
+        <div class="analytics-grid-column" id="news-analysis">
+            <p>News Analysis</p>
+            <div class="analytics-grid-item">
+                <span>Average Polarity</span>
+                <strong><span>{{ news_polarity }}</span></strong>
+            </div>
+            <div class="analytics-grid-item">
+                <span>Average Subjectivity</span>
+                <strong><span>{{ news_subjectivity}}</span></strong>
+            </div>
+        </div>
+        <br>
         <p>Latest News</p><br>
         {% for n in news %}
             <div class="news-item">
@@ -266,5 +278,25 @@
         window.onbeforeunload = function(symbol) {
             socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
         } 
+    </script>
+
+    <script>
+        var symbol_nav_buttons = document.querySelectorAll(".symbol-nav-btn");
+        var symbol_data_sections = document.querySelectorAll(".symbol-analytics");
+
+        function toggle_class(clicked_id) {
+            console.log(clicked_id);
+
+            for (let i = 0; i < symbol_data_sections.length; i++) {
+                console.log(symbol_data_sections[i].classList[0], clicked_id);
+                if (symbol_data_sections[i].classList[0] == clicked_id) {
+                    symbol_data_sections[i].classList.add("show");
+                    symbol_nav_buttons[i].classList.add("active");
+                } else {
+                    symbol_data_sections[i].classList.remove("show");
+                    symbol_nav_buttons[i].classList.remove("active");
+                }
+            }
+        }
     </script>
 {% endblock %}
