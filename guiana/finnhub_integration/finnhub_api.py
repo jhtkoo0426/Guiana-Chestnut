@@ -8,6 +8,7 @@ import time
 import finnhub as fh
 import requests
 import csv
+import yfinance as yf
 import spacy
 from spacytextblob.spacytextblob import SpacyTextBlob
 
@@ -165,12 +166,15 @@ class FinnhubClient:
     
 
     # Symbol-specific functions
+    # Main function to return all the data (unprocessed AND analysed) as
+    # a context object into the page.
     def search_symbol(self, symbol: str, context: dict):
         if FinnhubSupportedStockSymbols.objects.filter(symbol_name=symbol).exists():
             found_symbol_obj = FinnhubSupportedStockSymbols.objects.get(symbol_name=symbol)
             general_info = self.get_symbol_info(symbol)
             last_quote = self.get_symbol_last_quote(symbol)
             all_news, polarity_av, subjectivity_av = self.get_symbol_news(symbol)
+            print(self.get_symbol_income_statement(symbol))
 
             context['sym_obj'] = found_symbol_obj
             context['sym'] = symbol
@@ -192,12 +196,12 @@ class FinnhubClient:
         return context
 
     
-    # Auxiliary function to get a symbol's company's general information
+    # Gets a symbol's company's general information
     def get_symbol_info(self, symbol: str):
         return self.client.company_profile2(symbol=symbol)
 
     
-    # Auxiliary function to get a symbol's quotes from 2010 onwards
+    # Get a symbol's quotes from 2010 onwards
     def get_symbol_candlesticks(self, symbol: str):
         RESOLUTION = 'D'
         start_date = time.mktime(
@@ -216,10 +220,14 @@ class FinnhubClient:
         return processed
 
     
+    # Gets the most recent price quote (close, high, low, volume, previous close)
+    # of a symbol
     def get_symbol_last_quote(self, symbol: str):
         return self.client.quote(symbol)
 
         
+    # Get yesterday's closing price of a symbol. If yesterday was a Saturday or
+    # Sunday, get the last Friday closing price.
     def get_ytd_close(self, symbol: str):
         weekday_int = datetime.datetime.today().weekday()
         today = int(datetime.datetime.now(pytz.timezone('US/Central')).timestamp())
@@ -273,8 +281,20 @@ class FinnhubClient:
         subjectivities_avg = round(subjectivities / len(all_news), 4)
         return all_news, polarities_avg, subjectivities_avg
     
+    # Helper function for get_symbol_news to analyse sentiment of news summary
     def news_sentiment_analysis(self, summary: str):
         analysis = self.nlp(summary)
         news_sentiment = analysis._.blob.sentiment
         polarity, subjectivity = news_sentiment.polarity, news_sentiment.subjectivity
         return polarity, subjectivity
+
+
+    def get_symbol_earnings_surprises(self, symbol: str):
+        earnings_list = self.client.company_earnings(symbol=symbol)
+        earnings_actual = [earnings_dict["actual"] for earnings_dict in earnings_list]
+        earnings_estimates = [earnings_dict["estimate"] for earnings_dict in earnings_list]
+        return earnings_actual, earnings_estimates
+
+    
+    def earnings_analysis(self, earnings_actual, earnings_estimates):
+        pass

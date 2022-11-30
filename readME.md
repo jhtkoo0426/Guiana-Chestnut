@@ -50,12 +50,13 @@ coverage html
 ## Todo
 - [ ] Prevent access to login & register page when logged in
 - [ ] Prevent access to login-only pages when not logged in
-- [ ] Refactor search results page into individual sections (overall, news, strategies pages should all be separated)
+- [x] Refactor search results page into individual sections (overall, news, strategies pages should all be separated)
 
 
 ## Future features
 - [x] News sentiment analysis (based on NLP)
 - [ ] Simple time series forecasting for stock trends (overall trend only)
+- [ ] Basic financials
 - [ ] Extend platform to other financial instruments (crypto, etc.)
 - [ ] Volume spread analysis
 
