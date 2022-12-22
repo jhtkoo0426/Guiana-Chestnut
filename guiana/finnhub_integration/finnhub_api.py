@@ -84,6 +84,7 @@ class FinnhubClient:
         now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=datetime.timezone.utc).timestamp()
         return now
     
+
     def calc_date_from_timestamp(self, timestamp, format):
         """
         Calculate the date from the provided timestamp with a specific format.
@@ -92,6 +93,7 @@ class FinnhubClient:
         @param format: String format for the calculated timestamp.
         """
         return datetime.datetime.fromtimestamp(timestamp).strftime(format)
+
 
     def calc_date_delta_from_timestamp(self, timestamp, days_ago, format):
         """
@@ -103,6 +105,7 @@ class FinnhubClient:
         """
         date_delta = timestamp - days_ago * 24 * 60 * 60
         return datetime.datetime.fromtimestamp(date_delta).strftime(format)
+
 
     def calc_time_delta_from_now(self, timestamp):
         """
@@ -160,22 +163,36 @@ class FinnhubClient:
 
 
     # General functions
-    def get_latest_news(self):
-        # https://finnhub.io/docs/api/market-news
-        return self.client.general_news('general', min_id=0)[:10]
+    def get_latest_news(self, no_of_news: int):
+        """
+        Fetches the latest news in the financial industry.
+        (Resource: https://finnhub.io/docs/api/market-news)
+
+        @param no_of_news: Number of news articles to fetch.
+        @returns: List of latest news in the financial industry.
+        """
+        return self.client.general_news('general', min_id=0)[:no_of_news]
     
 
     # Symbol-specific functions
-    # Main function to return all the data (unprocessed AND analysed) as
-    # a context object into the page.
     def search_symbol(self, symbol: str, context: dict):
+        """
+        Main function to return all the unprocessed AND analysed data as a context object
+        to a Django webpage.
+
+        @param symbol: A ticker symbol to uniquely identify a publicly traded share of a stock.
+        @param context: Context object to pass into the Django webpage.
+        @returns: A context (dictionary) object consisting of all relevant information of the symbol
+        that shall be rendered in the Django webpage.
+        """
         if FinnhubSupportedStockSymbols.objects.filter(symbol_name=symbol).exists():
             found_symbol_obj = FinnhubSupportedStockSymbols.objects.get(symbol_name=symbol)
             general_info = self.get_symbol_info(symbol)
             last_quote = self.get_symbol_last_quote(symbol)
             all_news, polarity_av, subjectivity_av = self.get_symbol_news(symbol)
-            print(self.get_symbol_income_statement(symbol))
 
+            # The "context" dictionary is only a single-level hash map since I only designed a single-level
+            # filter to search dictionary values by key.
             context['sym_obj'] = found_symbol_obj
             context['sym'] = symbol
             context['sym_country'] = general_info['country']
@@ -196,20 +213,30 @@ class FinnhubClient:
         return context
 
     
-    # Gets a symbol's company's general information
     def get_symbol_info(self, symbol: str):
+        """
+        Fetch the general information of a symbol's underlying company.
+
+        @param symbol: A ticker symbol to uniquely identify a publicly traded share of a stock.
+        @returns: Dictionary of basic information of a symbol's underlying company.
+        """
         return self.client.company_profile2(symbol=symbol)
 
     
-    # Get a symbol's quotes from 2010 onwards
     def get_symbol_candlesticks(self, symbol: str):
-        RESOLUTION = 'D'
-        start_date = time.mktime(
-            datetime.datetime.strptime('01/01/2010', '%d/%m/%Y').timetuple()  # Timestamp of 1 Jan, 2000.
-        )
-        end_date = time.time()  # Current timestamp.
+        """
+        Fetch a symbol's quotes starting from 2010.
+
+        @param symbol: A ticker symbol to uniquely identify a publicly traded share of a stock.
+        @returns: Processed candlesticks for plotting in Apache ECharts.
+        """
+
+        # Timestamp of 1 Jan, 2000 and current timestamp
+        start_date = time.mktime(datetime.datetime.strptime('01/01/2010', '%d/%m/%Y').timetuple())  
+        end_date = time.time()
         
-        candlesticks_json = self.client.stock_candles(symbol, RESOLUTION, int(start_date), int(end_date))
+        # Fetch candlesticks of the target symbol from the Finnhub client
+        candlesticks_json = self.client.stock_candles(symbol, 'D', int(start_date), int(end_date))
         candlesticks_json['t'] = [datetime.datetime.fromtimestamp(x).strftime('%Y-%m-%d') for x in candlesticks_json['t']]
         
         # Process candlesticks for plotting with Apache ECharts
@@ -220,31 +247,47 @@ class FinnhubClient:
         return processed
 
     
-    # Gets the most recent price quote (close, high, low, volume, previous close)
-    # of a symbol
     def get_symbol_last_quote(self, symbol: str):
+        """
+        Gets to most recent price quote (close, high, low, volume, previous close) of a symbol. **This quote can
+        be from the present trading day.**
+
+        @param symbol: A ticker symbol to uniquely identify a publicly traded share of a stock.
+        """
         return self.client.quote(symbol)
 
-        
-    # Get yesterday's closing price of a symbol. If yesterday was a Saturday or
-    # Sunday, get the last Friday closing price.
+
     def get_ytd_close(self, symbol: str):
+        """
+        Get yesterday's closing price of a symbol. If yesterday was a Saturday or Sunday, get the last Friday
+        closing price.
+
+        @param symbol: A ticker symbol to uniquely identify a publicly traded share of a stock.
+        @returns: The last closing price of a symbol.
+        """
         weekday_int = datetime.datetime.today().weekday()
         today = int(datetime.datetime.now(pytz.timezone('US/Central')).timestamp())
 
-        # Check if today is Monday (weekday=0) or Sunday (weekday=6)
+        days_delta = 1
         if weekday_int == 6:
-            yesterday = today - 2 * 24 * 60 * 60
+            days_delta = 2
         elif weekday_int == 0:
-            yesterday = today - 3 * 24 * 60 * 60
-        else:
-            yesterday = today - 24 * 60 * 60
+            days_delta = 3
+
+        yesterday = today - days_delta * 24 * 60 * 60
         ytd_quote = self.client.stock_candles(symbol=symbol, resolution='D', _from=yesterday, to=today)
         return ytd_quote['c'][0]
     
 
     def get_symbol_financials(self, symbol: str):
-        # https://finnhub.io/docs/api/company-basic-financials
+        """
+        Fetch the basic financials of a symbol's underlying company. For now, fetch only the 52-week range,
+        beta (5Y & monthly), EPS(TTM), Payout Ratio (Annual & TTM).
+        (Resource: https://finnhub.io/docs/api/company-basic-financials)
+
+        @param symbol: A ticker symbol to uniquely identify a publicly traded share of a stock.
+        @returns: A dictionary of basic financial information.
+        """
         financials = self.client.company_basic_financials(symbol, 'all')['metric']
         metrics = {
             "52-week range": str(financials["52WeekLow"]) + " - " + str(financials["52WeekHigh"]),
@@ -259,8 +302,9 @@ class FinnhubClient:
     def get_symbol_news(self, symbol: str):
         """
         Fetch one week worth of related news of a symbol.
-        Resource: https://finnhub.io/docs/api/company-news
+        (Resource: https://finnhub.io/docs/api/company-news)
 
+        @param symbol: A ticker symbol to uniquely identify a publicly traded share of a stock.
         @returns: List of related news
         """
 

@@ -21,14 +21,14 @@ class DashboardView(FinnhubMixin, View):
 
         if self.f.check_account_ready(request):
             context = {
-                'latest_news': self.f.get_latest_news()
+                'latest_news': self.f.get_latest_news(no_of_news=10)
             }
         return render(request, self.template_name, context=context)
     
     def post(self, request):
         if self.f.check_account_ready(request):
             context = {
-                'latest_news': self.f.get_latest_news()
+                'latest_news': self.f.get_latest_news(no_of_news=10)
             }
         return render(request, self.template_name, context=context)
 
